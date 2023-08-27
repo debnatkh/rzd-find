@@ -20,7 +20,7 @@ class Class(NamedTuple):
 def search_for_ticket(search_time: str = '21:00') -> List[Class]:
     driver.get('https://ticket.rzd.ru/searchresults/v/1/5a3244bc340c7441a0a556ca/5a323c29340c7441a0a556bb/2023-09-03')
     count = 0
-    while 'Бетанкур' not in driver.page_source:
+    while 'Плацкарт' not in driver.page_source:
         time.sleep(20)
         count += 1
         if count == 60:
