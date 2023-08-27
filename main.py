@@ -19,8 +19,12 @@ class Class(NamedTuple):
 
 def search_for_ticket(search_time: str = '21:00') -> List[Class]:
     driver.get('https://ticket.rzd.ru/searchresults/v/1/5a3244bc340c7441a0a556ca/5a323c29340c7441a0a556bb/2023-09-03')
+    count = 0
     while 'Бетанкур' not in driver.page_source:
-        time.sleep(1)
+        time.sleep(20)
+        count += 1
+        if count == 60:
+            return []
     elems = driver.find_elements(By.XPATH, '//rzd-search-results-card-railway-flat-card')
     logging.info(f'Found {len(elems)} trains')
     elems = [e for e in elems if search_time in e.text]
@@ -53,7 +57,12 @@ def send_telegram_notification(message):
     return response.json()
 
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.INFO,
+    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+)
 
 if __name__ == '__main__':
     while True:
